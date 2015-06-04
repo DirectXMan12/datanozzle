@@ -27,13 +27,14 @@ def _filter_arg(name, multiple=True):
 
 
 class Entry(collections.Mapping):
-    __slots__ = ('certificate', 'signature', 'index',
-                 'timestamp', 'topic', '_msg')
+    __slots__ = ('certificate', 'signature', 'meta',
+                 'index', 'timestamp', 'topic', '_msg')
 
 
     def __init__(self, json):
         self.certificate = json['certificate']
         self.signature = json['signature']
+        self.meta = json.get('meta', {})
         self.index = json['i']
         self.timestamp = datetime.datetime.fromtimestamp(
             int(float(json['timestamp'])))
@@ -102,6 +103,7 @@ class Grepper(object):
         g = copy.deepcopy(self)
         g._args.setdefault('meta', [])
         g._args['meta'].extend(args)
+        return g
 
     def grouped(self):
         g = copy.deepcopy(self)
