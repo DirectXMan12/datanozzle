@@ -65,6 +65,9 @@ Queries
 - `descending` (*property*): sort results in descending order
 - `take(pages)`: only return results from the first *pages* pages
 - `skip(pages)`: skip the first *pages* pages
+- `starting_at(start)`: return results from after the given date/time
+- `ending_at(end)`: return results from before the given date/time
+- `delta_seconds(delta)`: modify start/end times by *delta* seconds
 
 Data Properties
 ---------------

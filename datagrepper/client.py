@@ -53,7 +53,7 @@ class Entry(collections.Mapping):
         self.meta = json.get('meta', {})
         self.index = json['i']
         self.timestamp = datetime.datetime.fromtimestamp(
-            int(float(json['timestamp'])))
+            float(json['timestamp']))
         self.topic = json['topic']
 
         self._msg = json['msg']
@@ -161,8 +161,31 @@ class Grepper(object):
         g._args['rows_per_page'] = rows
         return g
 
+    def starting_at(self, start):
+        if isinstance(start, datetime.datetime):
+            start = start.timestamp()
+
+        g = copy.deepcopy(self)
+        g._args['start'] = start
+        return g
+
+    def ending_at(self, end):
+        if isinstance(end, datetime.datetime):
+            end = end.timestamp()
+
+        g = copy.deepcopy(self)
+        g._args['end'] = end
+        return g
+
+    def delta_seconds(self, delta):
+        g = copy.deepcopy(self)
+        g._args['delta'] = delta
+        return g
+
     _ALT_NAMES = {'containing': 'contains', 'rows': 'rows_per_page',
-                  'paginate': 'rows_per_page', 'skip': 'page'}
+                  'paginate': 'rows_per_page', 'skip': 'page',
+                  'starting_at': 'start', 'ending_at': 'end',
+                  'delta_seconds': 'delta'}
 
     def reset(self, name):
         g = copy.deepcopy(self)

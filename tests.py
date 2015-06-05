@@ -8,6 +8,8 @@ import requests
 
 import datagrepper.client as dg
 
+# TODO(directxman12): do we need to explicity convert timezone info
+# for datetimes
 
 class GrepperTestCase(unittest.TestCase):
     @classmethod
@@ -169,6 +171,25 @@ class GrepperTestCase(unittest.TestCase):
         self.assertEqual(requests.get.call_args[1]['params']['rows_per_page'],
                          5)
 
+    def test_starting_at(self):
+        now = datetime.datetime.now()
+        g = dg.Grepper().starting_at(now)
+        list(g)
+        self.assertEqual(requests.get.call_args[1]['params']['start'],
+                         now.timestamp())
+
+    def test_ending_at(self):
+        now = datetime.datetime.now()
+        g = dg.Grepper().ending_at(now)
+        list(g)
+        self.assertEqual(requests.get.call_args[1]['params']['end'],
+                         now.timestamp())
+
+    def test_delta_seconds(self):
+        g = dg.Grepper().delta_seconds(10)
+        list(g)
+        self.assertEqual(requests.get.call_args[1]['params']['delta'],
+                         10)
 
 class EntryTestCase(unittest.TestCase):
     @classmethod
