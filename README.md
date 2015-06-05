@@ -16,7 +16,7 @@ Usage
 
 The API is designed around being chainable.  To start, create a new `Grepper`:
 
-    >>> from datagrepper.client import Grepper
+    >>> from datanozzle import Grepper
     >>> g = Grepper()
     >>>
 
@@ -42,7 +42,7 @@ available in a dict-like manner:
     >>>
 
 Most queries can support multiple values.  You can either pass multiple values, like
-`g.by_user('sross', 'someuser')` or chain, like `g.by_user('sross').by_user('someuser')`. 
+`g.by_user('sross', 'someuser')` or chain, like `g.by_user('sross').by_user('someuser')`.
 To get a query with a parameter reset, call `reset(parameter_name)`, like `g.reset('user')`.
 
 

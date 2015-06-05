@@ -6,7 +6,7 @@ import copy
 
 import requests
 
-import datagrepper.client as dg
+import datanozzle as dg
 
 # TODO(directxman12): do we need to explicity convert timezone info
 # for datetimes

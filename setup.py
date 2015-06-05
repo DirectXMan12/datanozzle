@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(
-    name='datagrepper-client',
+    name='datanozzle',
     version='0.9.0',
     description='A Python client for Datagrepper',
     long_description=open('README.md').read(),
@@ -10,7 +10,7 @@ setup(
     author_email='sross@redhat.com',
     license='GPLv2+',
     url='https://github.com/directxman12/py-datagrepper',
-    packages=['datagrepper'],
+    packages=['datanozzle'],
     install_requires=['requests'],
     keywords='datagrepper',
     classifiers=[
