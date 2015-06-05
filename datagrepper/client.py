@@ -115,18 +115,7 @@ class Grepper(object):
             pg += 1
 
     # formatting
-    def with_meta(self, *args):
-        g = copy.deepcopy(self)
-        g._args.setdefault('meta', [])
-        g._args['meta'].extend(args)
-        return g
-
-    def grouped(self):
-        g = copy.deepcopy(self)
-        g._args['grouped'] = 'true'
-        return g
-
-    def take(self, pages=None):
+    def take(self, pages):
         if pages is None:
             raise ValueError("You must specify a number of pages.")
 
@@ -135,34 +124,52 @@ class Grepper(object):
 
         return g
 
-    # TODO(directxman12): with_chrome? with_size?
+    def skip(self, pages):
+        if pages is None:
+            pages = 0
 
-    # pagination
-    def paginate(self, rows=None, order=None, page=None):
         g = copy.deepcopy(self)
-
-        if page is not None:
-            g._args['page'] = page
-
-        if rows is not None:
-            g._args['rows_per_page'] = rows
-
-        if order is not None:
-            g._args['order'] = order
+        g._args['page'] = pages + 1
 
         return g
+
+    # TODO(directxman12): with_chrome? with_size?
+
+    @property
+    def ascending(self):
+        g = copy.deepcopy(self)
+        g._args['order'] = 'asc'
+        return g
+
+    @property
+    def descending(self):
+        g = copy.deepcopy(self)
+        g._args['order'] = 'desc'
+        return g
+
+    @property
+    def grouped(self):
+        g = copy.deepcopy(self)
+        g._args['grouped'] = 'true'
+        return g
+
+    # pagination
+    def paginate(self, rows):
+        g = copy.deepcopy(self)
+        g._args['rows_per_page'] = rows
+        return g
+
+    _ALT_NAMES = {'containing': 'contains', 'rows': 'rows_per_page',
+                  'paginate': 'rows_per_page', 'skip': 'page'}
 
     def reset(self, name):
         g = copy.deepcopy(self)
         if name == 'take':
             g._page_limit = None
         else:
-            if name == 'containing':
-                name = 'contains'
-            elif name == 'rows':
-                name = 'rows_per_page'
-
+            name = self._ALT_NAMES.get(name, name)
             del g._args[name]
+
         return g
 
     # query
@@ -177,3 +184,5 @@ class Grepper(object):
     without_package = _filter_arg('not_package')
     without_category = _filter_arg('not_category')
     without_topic = _filter_arg('not_topic')
+
+    with_meta = _filter_arg('meta')

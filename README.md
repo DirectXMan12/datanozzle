@@ -23,7 +23,7 @@ The API is designed around being chainable.  To start, create a new `Grepper`:
 Then, you can build up queries by chaining methods (each new method returns a new
 query object, so you can reuse partially built queries):
 
-    >>> q1 = g.by_user('sross').paginate(order='asc')
+    >>> q1 = g.by_user('sross').ascending
     >>> q2 = q1.by_topic('org.fedoraproject.prod.fedbadges.person.rank.advance')
     >>>
 
@@ -41,8 +41,9 @@ available in a dict-like manner:
     'sross'
     >>>
 
-Most queries can support multiple values.  You can either pass multiple values, like `g.by_user('sross', 'someuser')`
-or chain, like `g.by_user('sross').by_user('someuser')`.  To get a query with a parameter reset, call `g.reset('parameter_name')`.
+Most queries can support multiple values.  You can either pass multiple values, like
+`g.by_user('sross', 'someuser')` or chain, like `g.by_user('sross').by_user('someuser')`. 
+To get a query with a parameter reset, call `reset(parameter_name)`, like `g.reset('user')`.
 
 
 Queries
@@ -57,10 +58,13 @@ Queries
 - `by_topic(*topics)`: filter by topic
 - `without_topic(*topics)`: inverse of `by_topic`
 - `containing(substring)`: filter by keyword in the message
-- `paginate(rows=None, order=None, page=None)`: set the number of rows per page, sort order, and/or page number
-   (values of `None` are ignored)
+- `paginate(rows)`: set the number of rows per page
 - `with_meta(*meta_type)`: return additional meta-information with the results
-- `grouped()`: group similar results together
+- `grouped` (*property*): group similar results together
+- `ascending` (*property*): sort results in ascending order
+- `descending` (*property*): sort results in descending order
+- `take(pages)`: only return results from the first *pages* pages
+- `skip(pages)`: skip the first *pages* pages
 
 Data Properties
 ---------------
