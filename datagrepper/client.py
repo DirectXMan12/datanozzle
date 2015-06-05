@@ -25,14 +25,6 @@ import requests
 
 def _filter_arg(name, multiple=True):
     if multiple:
-        def filter_on_arg(self, arg):
-            g = copy.deepcopy(self)
-            g._args[name] = arg
-
-            return g
-
-        return filter_on_arg
-    else:
         def filter_on_arg_mult(self, *args):
             g = copy.deepcopy(self)
             g._args.setdefault(name, [])
@@ -41,6 +33,14 @@ def _filter_arg(name, multiple=True):
             return g
 
         return filter_on_arg_mult
+    else:
+        def filter_on_arg(self, arg):
+            g = copy.deepcopy(self)
+            g._args[name] = arg
+
+            return g
+
+        return filter_on_arg
 
 
 class Entry(collections.Mapping):
@@ -101,17 +101,19 @@ class Grepper(object):
         r = g._req()
 
         json = r.json()
-        yield from self._parse_json(json)
+        yield from g._parse_json(json)
         total_pages = json['pages']
-        if self._page_limit is not None and total_pages > self._page_limit:
-            total_pages = self._page_limit
+        if g._page_limit is not None and total_pages > g._page_limit:
+            total_pages = g._page_limit
 
         pg += 1
 
-        while pg < total_pages:
+        max_pg = total_pages + 1
+        while pg < max_pg:
             g._args['page'] = pg
+            r = g._req()
             json = r.json()
-            yield from self._parse_json(json)
+            yield from g._parse_json(json)
             pg += 1
 
     # formatting
