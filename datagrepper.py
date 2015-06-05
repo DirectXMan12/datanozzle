@@ -136,6 +136,19 @@ class Grepper(object):
 
         return g
 
+    def reset(self, name):
+        g = copy.deepcopy(self)
+        if name == 'take':
+            g._page_limit = None
+        else:
+            if name == 'containing':
+                name = 'contains'
+            elif name == 'rows':
+                name = 'rows_per_page'
+
+            del g._args[name]
+        return g
+
     # query
     by_user = _filter_arg('user', multiple=False)
     by_package = _filter_arg('package')
